@@ -1,4 +1,4 @@
-import com.itextpdf.io.util.IntHashtable;
+
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.canvas.parser.PdfTextExtractor;
@@ -9,7 +9,7 @@ import java.util.*;
 
 public class BooleanSearchEngine implements SearchEngine {
 
-    List<PageEntry> pageEntryList = new ArrayList<>();
+    //List<PageEntry> pageEntryList = new ArrayList<>();
     Map<String, Integer> freqs = new HashMap<>();
     Map<String, List<PageEntry>> base = new HashMap<>();
 
@@ -27,12 +27,24 @@ public class BooleanSearchEngine implements SearchEngine {
                 freqs.put(word, freqs.getOrDefault(word, 0) + 1);
             }
             for (Map.Entry<String, Integer> entry : freqs.entrySet()){
-                base.put(entry.getKey(),pageEntryList);
-
-                pageEntryList.add(new PageEntry(pdfsDir,i, entry.getValue()));
+                PageEntry pageEntry = new PageEntry(pdfsDir,i,entry.getValue());
+                addToList(entry.getKey(), pageEntry);
             }
-            System.out.println(pageEntryList);
+            freqs.clear();
         }
+        System.out.println(base);
+    }
+
+    public synchronized void addToList(String mapKey, PageEntry pageEntry){
+        List<PageEntry> pageEntryList = base.get(mapKey);
+        if (pageEntryList == null){
+            pageEntryList = new ArrayList<>();
+            pageEntryList.add(pageEntry);
+            base.put(mapKey, pageEntryList);
+        } else {
+            if (!pageEntryList.contains(pageEntry)) pageEntryList.add(pageEntry);
+        }
+
     }
 
     @Override
