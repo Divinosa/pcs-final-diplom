@@ -8,11 +8,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class BooleanSearchEngine implements SearchEngine {
-
-    //List<PageEntry> pageEntryList = new ArrayList<>();
     Map<String, Integer> freqs = new HashMap<>();
-    Map<String, List<PageEntry>> base = new HashMap<>();
-
     public BooleanSearchEngine(File pdfsDir) throws IOException {
         var doc = new PdfDocument(new PdfReader(pdfsDir));
         for (int i = 1; i < doc.getNumberOfPages(); i++){
@@ -32,15 +28,14 @@ public class BooleanSearchEngine implements SearchEngine {
             }
             freqs.clear();
         }
-        System.out.println(base);
     }
 
     public synchronized void addToList(String mapKey, PageEntry pageEntry){
-        List<PageEntry> pageEntryList = base.get(mapKey);
+        List<PageEntry> pageEntryList = PageEntry.base.get(mapKey);
         if (pageEntryList == null){
             pageEntryList = new ArrayList<>();
             pageEntryList.add(pageEntry);
-            base.put(mapKey, pageEntryList);
+            PageEntry.base.put(mapKey, pageEntryList);
         } else {
             if (!pageEntryList.contains(pageEntry)) pageEntryList.add(pageEntry);
         }
@@ -49,7 +44,11 @@ public class BooleanSearchEngine implements SearchEngine {
 
     @Override
     public List<PageEntry> search(String word) {
-        // тут реализуйте поиск по слову
-        return Collections.emptyList();
+        List<PageEntry> pageEntryList = new ArrayList<>();
+        if (PageEntry.base.containsKey(word)){
+            pageEntryList = PageEntry.base.get(word);
+        } else pageEntryList = null;
+        Collections.sort(pageEntryList);
+        return pageEntryList;
     }
 }
