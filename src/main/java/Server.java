@@ -1,12 +1,10 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
-    public Server(){
+    public Server() throws IOException {
+        BooleanSearchEngine engine = new BooleanSearchEngine(new File("pdfs\\SoftSkills.pdf"));
         try (ServerSocket serverSocket = new ServerSocket(8989);) { // стартуем сервер один(!) раз
             while (true) { // в цикле(!) принимаем подключения
                 try (
@@ -16,7 +14,7 @@ public class Server {
                 ) {
                     System.out.println("Поиск...");
                     final String word = in.readLine();
-                    //System.out.println(engine.search(word));
+                    out.println(engine.search(word));
                     // обработка одного подключения
                 }
             }
