@@ -7,7 +7,7 @@ public class Main extends Thread {
         BooleanSearchEngine engine = new BooleanSearchEngine(new File("pdfs\\SoftSkills.pdf"));
         Thread serverStart = new Thread(() -> {
             try (ServerSocket server = new ServerSocket(80);) {
-                System.out.println("Сервер запущен " + server.getLocalPort());
+                System.out.println("Сервер запущен ");
                 while (true) try (
                         Socket clientSocket = server.accept();
                         BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));

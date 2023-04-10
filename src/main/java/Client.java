@@ -14,6 +14,7 @@ public class Client {
              BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
              ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream())) {
 
+            System.out.println("Введите слово для поиска:");
             String word = reader.readLine();
             out.write(word + "\n");
             out.flush();
