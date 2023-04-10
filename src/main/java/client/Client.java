@@ -22,7 +22,7 @@ public class Client {
             out.write(word + "\n");
             out.flush();
             List<PageEntry> pageEntryList = new ArrayList<>();
-            pageEntryList.add((PageEntry) in.readObject());
+            pageEntryList = ((List) in.readObject());
             System.out.println(pageEntryList);
         } catch (Exception e){
             e.printStackTrace();

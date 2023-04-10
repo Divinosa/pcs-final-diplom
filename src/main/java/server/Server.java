@@ -18,7 +18,7 @@ public class Server {
                     ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
             ) {
                 String word = in.readLine();
-                out.writeObject(engine.search(word).toString());
+                out.writeObject(engine.search(word));
                 out.flush();
 
             }
