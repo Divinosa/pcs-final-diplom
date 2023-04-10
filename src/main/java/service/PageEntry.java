@@ -1,11 +1,14 @@
 package service;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PageEntry implements Comparable<PageEntry> {
+public class PageEntry implements Comparable<PageEntry>, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public static Map<String, List<PageEntry>> base = new HashMap<>();
 

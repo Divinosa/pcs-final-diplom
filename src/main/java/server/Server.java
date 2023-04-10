@@ -15,10 +15,10 @@ public class Server {
             while (true) try (
                     Socket clientSocket = server.accept();
                     BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                    BufferedWriter out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+                    ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
             ) {
                 String word = in.readLine();
-                out.write(engine.search(word).toString());
+                out.writeObject(engine.search(word).toString());
                 out.flush();
 
             }

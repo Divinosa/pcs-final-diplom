@@ -1,7 +1,11 @@
 package client;
 
+import service.PageEntry;
+
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Client {
 
@@ -12,14 +16,16 @@ public class Client {
         try (Socket clientSocket = new Socket(host, port);
              BufferedWriter out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
              BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))){
+             ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream())){
 
             String word = reader.readLine();
             out.write(word + "\n");
             out.flush();
-            String serverAnswer = in.readLine();
-            System.out.println(serverAnswer);
+            List<PageEntry> pageEntryList = new ArrayList<>();
+            pageEntryList.add((PageEntry) in.readObject());
+            System.out.println(pageEntryList);
+        } catch (Exception e){
+            e.printStackTrace();
         }
-
     }
 }
