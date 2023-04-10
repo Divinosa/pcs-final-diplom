@@ -1,4 +1,5 @@
 package server;
+
 import service.BooleanSearchEngine;
 
 import java.io.*;
