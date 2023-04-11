@@ -1,34 +1,40 @@
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class Main extends Thread {
+public class Main {
     public static void main(String[] args) throws Exception {
         Path relPath = Paths.get("pdfs/SoftSkills.pdf");
         Path absPath = relPath.toAbsolutePath();
         BooleanSearchEngine engine = new BooleanSearchEngine(absPath.toFile());
-        Thread serverStart = new Thread(() -> {
-            try (ServerSocket server = new ServerSocket(80);) {
-                System.out.println("Сервер запущен ");
-                while (true) try (
+        try (ServerSocket server = new ServerSocket(8989);) {
+            System.out.println("Сервер запущен ");
+            while (true) {
+                try (
                         Socket clientSocket = server.accept();
                         BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                        ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
+                        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
                 ) {
                     String word = in.readLine();
-                    out.writeObject(engine.search(word));
-                    out.flush();
-
+                    Gson gson = new GsonBuilder()
+                            .setPrettyPrinting()
+                            .create();
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (PageEntry pageEntry : engine.search(word)){
+                        stringBuilder.append(gson.toJson(pageEntry));
+                    }
+                    System.out.println(stringBuilder);
                 }
-            } catch (IOException e) {
-                System.out.println("Не могу стартовать сервер");
-                e.printStackTrace();
             }
-        });
-        serverStart.start();
-        Client client = new Client();
+        } catch (IOException e) {
+            System.out.println("Не могу стартовать сервер");
+            e.printStackTrace();
+        }
     }
 }
 
