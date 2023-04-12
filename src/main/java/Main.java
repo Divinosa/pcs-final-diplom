@@ -13,7 +13,7 @@ public class Main {
         Path absPath = relPath.toAbsolutePath();
         BooleanSearchEngine engine = new BooleanSearchEngine(absPath.toFile());
         try (ServerSocket server = new ServerSocket(8989);) {
-            System.out.println("Сервер запущен ");
+            System.out.println("Сервер запущен " + server.getLocalPort());
             while (true) {
                 try (
                         Socket clientSocket = server.accept();

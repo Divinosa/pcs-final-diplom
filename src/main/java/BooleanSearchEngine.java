@@ -1,3 +1,4 @@
+import Client.Client;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.canvas.parser.PdfTextExtractor;
@@ -29,7 +30,7 @@ public class BooleanSearchEngine implements SearchEngine {
         }
     }
 
-    private synchronized void addToList(String mapKey, PageEntry pageEntry) {
+    private synchronized void addToList(String mapKey, PageEntry pageEntry) throws IOException {
         List<PageEntry> pageEntryList = base.get(mapKey);
         if (pageEntryList == null) {
             pageEntryList = new ArrayList<>();
