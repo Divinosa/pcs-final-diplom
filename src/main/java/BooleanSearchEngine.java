@@ -9,24 +9,26 @@ public class BooleanSearchEngine implements SearchEngine {
     private Map<String, Integer> freqs = new HashMap<>();
     private Map<String, List<PageEntry>> base = new HashMap<>();
 
-    public BooleanSearchEngine(File pdfsDir) throws IOException {
-        var doc = new PdfDocument(new PdfReader(pdfsDir));
-        for (int i = 1; i < doc.getNumberOfPages(); i++) {
-            var page = doc.getPage(i);
-            var text = PdfTextExtractor.getTextFromPage(page);
-            var words = text.split("\\P{IsAlphabetic}+");
-            for (var word : words) { // перебираем слова
-                if (word.isEmpty()) {
-                    continue;
+    public BooleanSearchEngine(File[] dir) throws IOException {
+        for (File file: dir) {
+            var doc = new PdfDocument(new PdfReader(file));
+            for (int i = 1; i < doc.getNumberOfPages(); i++) {
+                var page = doc.getPage(i);
+                var text = PdfTextExtractor.getTextFromPage(page);
+                var words = text.split("\\P{IsAlphabetic}+");
+                for (var word : words) { // перебираем слова
+                    if (word.isEmpty()) {
+                        continue;
+                    }
+                    word = word.toLowerCase();
+                    freqs.put(word, freqs.getOrDefault(word, 0) + 1);
                 }
-                word = word.toLowerCase();
-                freqs.put(word, freqs.getOrDefault(word, 0) + 1);
+                for (Map.Entry<String, Integer> entry : freqs.entrySet()) {
+                    PageEntry pageEntry = new PageEntry(file, i, entry.getValue());
+                    addToList(entry.getKey(), pageEntry);
+                }
+                freqs.clear();
             }
-            for (Map.Entry<String, Integer> entry : freqs.entrySet()) {
-                PageEntry pageEntry = new PageEntry(pdfsDir, i, entry.getValue());
-                addToList(entry.getKey(), pageEntry);
-            }
-            freqs.clear();
         }
         for (Map.Entry<String, List<PageEntry>> entry : base.entrySet()) {
             Collections.sort(entry.getValue());

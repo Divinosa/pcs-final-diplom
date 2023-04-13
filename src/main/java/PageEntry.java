@@ -1,4 +1,4 @@
-import java.io.*;
+import java.io.File;
 
 public class PageEntry implements Comparable<PageEntry> {
     private final String pdfName;

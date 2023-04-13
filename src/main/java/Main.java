@@ -9,9 +9,9 @@ import java.nio.file.Paths;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        Path relPath = Paths.get("pdfs/SoftSkills.pdf");
-        Path absPath = relPath.toAbsolutePath();
-        BooleanSearchEngine engine = new BooleanSearchEngine(absPath.toFile());
+        File directoryPath = new File("pdfs");
+        File filesList[] = directoryPath.listFiles();
+        BooleanSearchEngine engine = new BooleanSearchEngine(filesList);
         try (ServerSocket server = new ServerSocket(8989);) {
             System.out.println("Сервер запущен " + server.getLocalPort());
             while (true) {

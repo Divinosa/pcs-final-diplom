@@ -8,12 +8,14 @@ public class Client {
         try (Socket clientSocket = new Socket(host, port);
              BufferedWriter out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
              BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
              ) {
 
             System.out.println("Введите слово для поиска:");
             String word = reader.readLine();
             out.write(word + "\n");
             out.flush();
+            in.lines().forEach(System.out::println);
         } catch (Exception e) {
             e.printStackTrace();
         }
