@@ -28,9 +28,12 @@ public class BooleanSearchEngine implements SearchEngine {
             }
             freqs.clear();
         }
+        for (Map.Entry<String, List<PageEntry>> entry : base.entrySet()) {
+            Collections.sort(entry.getValue());
+        }
     }
 
-    private synchronized void addToList(String mapKey, PageEntry pageEntry) throws IOException {
+    private void addToList(String mapKey, PageEntry pageEntry) throws IOException {
         List<PageEntry> pageEntryList = base.get(mapKey);
         if (pageEntryList == null) {
             pageEntryList = new ArrayList<>();
@@ -39,13 +42,12 @@ public class BooleanSearchEngine implements SearchEngine {
         } else {
             if (!pageEntryList.contains(pageEntry)) pageEntryList.add(pageEntry);
         }
-        Collections.sort(pageEntryList);
     }
 
     @Override
     public List<PageEntry> search(String word) throws IOException {
         List<PageEntry> pageEntryList;
-        if (base.containsKey(word)) {
+        if (base.containsKey(word.toLowerCase())) {
             pageEntryList = base.get(word);
         } else {
             pageEntryList = new ArrayList<>();;

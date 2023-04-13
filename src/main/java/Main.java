@@ -24,11 +24,7 @@ public class Main {
                     Gson gson = new GsonBuilder()
                             .setPrettyPrinting()
                             .create();
-                    StringBuilder stringBuilder = new StringBuilder();
-                    for (PageEntry pageEntry : engine.search(word)){
-                        stringBuilder.append(gson.toJson(pageEntry));
-                    }
-                    System.out.println(stringBuilder);
+                    out.write(gson.toJson(engine.search(word)));
                 }
             }
         } catch (IOException e) {
