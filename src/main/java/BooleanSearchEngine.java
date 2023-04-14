@@ -50,7 +50,7 @@ public class BooleanSearchEngine implements SearchEngine {
     public List<PageEntry> search(String word) throws IOException {
         List<PageEntry> pageEntryList;
         if (base.containsKey(word.toLowerCase())) {
-            pageEntryList = base.get(word);
+            pageEntryList = base.get(word.toLowerCase());
         } else {
             pageEntryList = new ArrayList<>();;
         }
